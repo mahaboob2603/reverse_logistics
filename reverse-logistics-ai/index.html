@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Reverse Logistics Decision Assistant — MBA Operations Management Project" />
+  <title>AI Reverse Logistics Decision Assistant</title>
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Favicon (inline SVG) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>♻️</text></svg>" />
+</head>
+<body>
+
+  <!-- Skip to main content (accessibility) -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- ============================================================
+       TOP NAVIGATION
+       ============================================================ -->
+  <header class="top-nav" role="banner">
+    <div class="nav-brand">
+      <div class="nav-brand-icon" aria-hidden="true">♻️</div>
+      <div class="nav-brand-text">
+        <h1>Reverse Logistics <span style="color:var(--color-primary)">AI</span></h1>
+        <span class="nav-brand-badge">Decision Assistant</span>
+      </div>
+    </div>
+
+    <nav class="nav-tabs" role="tablist" aria-label="Main navigation">
+      <button class="nav-tab active" data-section="dashboard" role="tab" aria-selected="true">
+        <span aria-hidden="true">📊</span> Dashboard
+      </button>
+      <button class="nav-tab" data-section="comparison" role="tab" aria-selected="false">
+        <span aria-hidden="true">📋</span> Comparison
+      </button>
+      <button class="nav-tab" data-section="evaluation" role="tab" aria-selected="false">
+        <span aria-hidden="true">🎯</span> Evaluation
+      </button>
+    </nav>
+
+    <div class="nav-actions">
+      <!-- Dark Mode Toggle -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="theme-toggle-knob">☀️</span>
+      </button>
+
+      <!-- Export CSV -->
+      <button class="btn btn-secondary btn-sm" id="btn-export" title="Export CSV (Ctrl+E)">
+        <span aria-hidden="true">📥</span> Export
+      </button>
+
+      <!-- Analyse Return (primary CTA) -->
+      <button class="btn btn-primary" id="btn-analyse" title="Analyse a return (Ctrl+N)">
+        <span aria-hidden="true">🔬</span> Analyse Return
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN CONTENT
+       ============================================================ -->
+  <main class="main-content" id="main">
+
+    <!-- ==========================================================
+         SECTION: DASHBOARD
+         ========================================================== -->
+    <section class="section active" id="section-dashboard" aria-label="Dashboard">
+
+      <!-- Hero Strip -->
+      <div class="hero-strip scroll-animate">
+        <div class="hero-status">
+          <span class="pulse-dot"></span>
+          <span>AI Engine Active — Real-time Analysis</span>
+        </div>
+        <div class="hero-callout" id="hero-recovery">₹0 <span>recovered from 0 items — 0.0% avg recovery</span></div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid scroll-animate">
+        <!-- Total Returns -->
+        <div class="kpi-card stagger">
+          <div class="kpi-card-header">
+            <span class="kpi-card-label">Total Returns</span>
+            <span class="kpi-card-icon green" aria-hidden="true">📦</span>
+          </div>
+          <div class="kpi-card-value tabular-nums" id="kpi-total">0</div>
+          <div class="kpi-card-sub">Products processed</div>
+        </div>
+
+        <!-- Restock -->
+        <div class="kpi-card stagger">
+          <div class="kpi-card-header">
+            <span class="kpi-card-label">Restock</span>
+            <span class="kpi-card-icon green" aria-hidden="true">✅</span>
+          </div>
+          <div class="kpi-card-value tabular-nums" id="kpi-restock">0</div>
+          <div class="kpi-card-sub">Direct resale ready</div>
+        </div>
+
+        <!-- Repair -->
+        <div class="kpi-card stagger">
+          <div class="kpi-card-header">
+            <span class="kpi-card-label">Repair</span>
+            <span class="kpi-card-icon amber" aria-hidden="true">🔧</span>
+          </div>
+          <div class="kpi-card-value tabular-nums" id="kpi-repair">0</div>
+          <div class="kpi-card-sub">Needs fixing</div>
+        </div>
+
+        <!-- Recycle -->
+        <div class="kpi-card stagger">
+          <div class="kpi-card-header">
+            <span class="kpi-card-label">Recycle</span>
+            <span class="kpi-card-icon blue" aria-hidden="true">♻️</span>
+          </div>
+          <div class="kpi-card-value tabular-nums" id="kpi-recycle">0</div>
+          <div class="kpi-card-sub">Material recovery</div>
+        </div>
+
+        <!-- Total Recovery Value -->
+        <div class="kpi-card stagger">
+          <div class="kpi-card-header">
+            <span class="kpi-card-label">Recovery Value</span>
+            <span class="kpi-card-icon green" aria-hidden="true">💰</span>
+          </div>
+          <div class="kpi-card-value tabular-nums highlight" id="kpi-recovery">₹0</div>
+          <div class="kpi-card-sub">Estimated total</div>
+        </div>
+
+        <!-- Decision Accuracy -->
+        <div class="kpi-card stagger">
+          <div class="kpi-card-header">
+            <span class="kpi-card-label">Decision Accuracy</span>
+            <span class="kpi-card-icon teal" aria-hidden="true">🎯</span>
+          </div>
+          <div class="kpi-card-value tabular-nums" id="kpi-accuracy">—</div>
+          <div class="kpi-card-sub">vs. expert judgement</div>
+        </div>
+      </div>
+
+      <!-- Secondary Strip: Refurbish & Repackage Counts -->
+      <div class="secondary-strip scroll-animate">
+        <span class="secondary-strip-label">Also tracked:</span>
+        <span class="pill stagger" id="pill-refurbish">Refurbish: 0</span>
+        <span class="pill stagger" id="pill-repackage">Repackage: 0</span>
+      </div>
+
+      <!-- Dashboard Grid: Charts + Environmental + Simulator -->
+      <div class="section-grid scroll-animate">
+
+        <!-- Action Distribution (Donut Chart) -->
+        <div class="card stagger">
+          <div class="card-header">
+            <div class="card-header-left">
+              <h2>Action Distribution</h2>
+              <p>AI-recommended actions breakdown</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="donut-wrapper">
+              <div class="donut-container" id="donut-chart"></div>
+            </div>
+            <div id="dist-rows"></div>
+          </div>
+        </div>
+
+        <!-- Environmental Impact -->
+        <div class="card stagger">
+          <div class="card-header">
+            <div class="card-header-left">
+              <h2>Environmental Impact</h2>
+              <p>Sustainability metrics from AI decisions</p>
+            </div>
+          </div>
+          <div class="card-body env-card-body">
+            <div class="env-ring-container" id="env-ring"></div>
+            <div class="env-metrics" id="env-metrics">
+              <div class="env-metric-row">
+                <div class="env-metric-icon" style="background:#E8F5E9;color:#2E7D32">🌱</div>
+                <div class="env-metric-text">
+                  <div class="label">CO₂ Avoided</div>
+                  <div class="value">0.0 kg</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What-If Simulator -->
+      <div class="card scroll-animate" style="margin-top:var(--space-lg)">
+        <div class="card-header">
+          <div class="card-header-left">
+            <h2>What-If Simulator</h2>
+            <p>Adjust recovery rates and see projected impact</p>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="sim-reset">↻ Reset</button>
+        </div>
+        <div class="card-body">
+          <div class="simulator-grid">
+            <div class="simulator-sliders" id="sim-sliders"></div>
+            <div class="simulator-preview" id="sim-preview"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Supply Chain Flow Diagram -->
+      <div class="card scroll-animate" style="margin-top:var(--space-lg)">
+        <div class="card-header">
+          <div class="card-header-left">
+            <h2>Reverse Supply Chain Flow</h2>
+            <p>End-to-end AI-powered disposition pipeline</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="flow-container" id="flow-diagram"></div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Bar -->
+      <div class="secondary-strip scroll-animate" style="margin-top:var(--space-lg);justify-content:center;gap:var(--space-md)">
+        <button class="btn btn-secondary btn-sm" id="btn-view-all">
+          <span aria-hidden="true">📋</span> View All Returns
+        </button>
+        <button class="btn btn-secondary btn-sm" id="btn-evaluate">
+          <span aria-hidden="true">🎯</span> Evaluate Results
+        </button>
+        <button class="btn btn-danger btn-sm" id="btn-reset">
+          <span aria-hidden="true">🔄</span> Reset Dashboard
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SECTION: COMPARISON TABLE
+         ========================================================== -->
+    <section class="section" id="section-comparison" aria-label="Comparison Table">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <h2>Returns Comparison Table</h2>
+            <p>AI recommendations vs. expert judgement</p>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btn-add" title="Add Return">
+            <span aria-hidden="true">➕</span> Add Return
+          </button>
+        </div>
+        <div class="card-body">
+          <!-- Table Controls -->
+          <div class="table-controls">
+            <input type="text"
+                   class="search-box"
+                   id="search-box"
+                   placeholder="🔍  Search by ID, product, or action…"
+                   aria-label="Search returns" />
+            <select id="filter-action" class="form-control" aria-label="Filter by action" style="max-width:220px">
+              <option value="all">All Actions</option>
+              <option value="Restock">Restock</option>
+              <option value="Repackage and Resell">Repackage and Resell</option>
+              <option value="Refurbish and Resell">Refurbish and Resell</option>
+              <option value="Repair">Repair</option>
+              <option value="Recycle">Recycle</option>
+            </select>
+          </div>
+
+          <!-- Data Table -->
+          <div style="overflow-x:auto">
+            <table class="data-table" role="table">
+              <thead>
+                <tr>
+                  <th scope="col">Return ID</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">AI Recommendation</th>
+                  <th scope="col">Known Answer</th>
+                  <th scope="col">Recovery Value</th>
+                  <th scope="col">Match Status</th>
+                  <th scope="col">Confidence</th>
+                  <th scope="col" style="text-align:center">Action</th>
+                </tr>
+              </thead>
+              <tbody id="table-body">
+                <tr><td colspan="8" class="empty-state"><p>Loading records…</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SECTION: EVALUATION
+         ========================================================== -->
+    <section class="section" id="section-evaluation" aria-label="Evaluation Summary">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <h2>Evaluation Summary</h2>
+            <p>How well does the AI match expert decisions?</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="eval-summary visible" id="evaluation-section">
+            <!-- Metrics Row -->
+            <div class="eval-header-metrics">
+              <div class="eval-metric-card">
+                <div class="metric-value" id="eval-accuracy" style="color:var(--color-primary)">0.0%</div>
+                <div class="metric-label">Accuracy</div>
+              </div>
+              <div class="eval-metric-card">
+                <div class="metric-value" id="eval-correct" style="color:var(--color-success)">0</div>
+                <div class="metric-label">Correct</div>
+              </div>
+              <div class="eval-metric-card">
+                <div class="metric-value" id="eval-total" style="color:var(--color-text-secondary)">0</div>
+                <div class="metric-label">Total Evaluated</div>
+              </div>
+            </div>
+
+            <!-- Mismatch List -->
+            <h3 style="font:var(--font-headline-sm);margin:var(--space-lg) 0 var(--space-md);color:var(--color-text)">Mismatched Decisions</h3>
+            <ul class="mismatch-list" id="mismatch-list">
+              <p style="color:var(--color-text-muted);text-align:center;padding:var(--space-lg)">
+                Navigate here and click "Evaluate Results" to view mismatches.
+              </p>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       ANALYSE RETURN PANEL (Slide-over Overlay)
+       ============================================================ -->
+  <div class="panel-overlay" id="analyse-panel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Analyse Return">
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Analyse Return</h2>
+        <button class="btn btn-icon" id="btn-close-panel" aria-label="Close panel">&times;</button>
+      </div>
+      <div class="panel-body">
+
+        <!-- Form Row: ID + Product -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-id">Return ID <span class="required">*</span></label>
+            <input type="text" class="form-control" id="input-id" placeholder="e.g. R-2001" required />
+            <span class="form-error" id="error-id"></span>
+          </div>
+          <div class="form-group">
+            <label for="input-product">Product Name <span class="required">*</span></label>
+            <input type="text" class="form-control" id="input-product" placeholder="e.g. Bluetooth Speaker" required />
+            <span class="form-error" id="error-product"></span>
+          </div>
+        </div>
+
+        <!-- Form Row: Price + Condition -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-price">Original Price (₹) <span class="required">*</span></label>
+            <input type="number" class="form-control" id="input-price" placeholder="e.g. 4999" min="1" step="any" required />
+            <span class="form-error" id="error-price"></span>
+          </div>
+          <div class="form-group">
+            <label for="input-condition">Product Condition <span class="required">*</span></label>
+            <select class="form-control" id="input-condition" required>
+              <option value="">Select condition…</option>
+              <option value="Unopened / New">Unopened / New</option>
+              <option value="Opened - Like New">Opened - Like New</option>
+              <option value="Missing Packaging/Accessories">Missing Packaging/Accessories</option>
+              <option value="Minor Cosmetic Damage">Minor Cosmetic Damage</option>
+              <option value="Functional Defect">Functional Defect</option>
+              <option value="Major Damage / Broken">Major Damage / Broken</option>
+            </select>
+            <span class="form-error" id="error-condition"></span>
+          </div>
+        </div>
+
+        <!-- Form Row: Reason + Expected Action -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-reason">Return Reason <span class="required">*</span></label>
+            <select class="form-control" id="input-reason" required>
+              <option value="">Select reason…</option>
+              <option value="Changed mind">Changed mind</option>
+              <option value="Wrong size">Wrong size</option>
+              <option value="Wrong item shipped">Wrong item shipped</option>
+              <option value="Defective">Defective</option>
+              <option value="Damaged in transit">Damaged in transit</option>
+              <option value="Not as described">Not as described</option>
+              <option value="Packaging damaged">Packaging damaged</option>
+            </select>
+            <span class="form-error" id="error-reason"></span>
+          </div>
+          <div class="form-group">
+            <label for="input-expected">Expected Action <span style="color:var(--color-text-muted)">(optional)</span></label>
+            <select class="form-control" id="input-expected">
+              <option value="">None — mark as Pending</option>
+              <option value="Restock">Restock</option>
+              <option value="Repackage and Resell">Repackage and Resell</option>
+              <option value="Refurbish and Resell">Refurbish and Resell</option>
+              <option value="Repair">Repair</option>
+              <option value="Recycle">Recycle</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Result Card (hidden until analysed) -->
+        <div class="result-card" id="result-card">
+          <div class="result-card-action" id="result-action">—</div>
+          <div class="result-card-metrics">
+            <div class="metric">
+              <span class="metric-label">Recovery %</span>
+              <span class="metric-value" id="result-recovery-pct">—</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Recovery Value</span>
+              <span class="metric-value" id="result-recovery-value">—</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Confidence</span>
+              <span class="metric-value" id="result-confidence">—</span>
+            </div>
+          </div>
+          <div class="result-card-reasoning" id="result-reasoning">—</div>
+          <div class="score-breakdown" id="result-scores"></div>
+        </div>
+      </div>
+
+      <!-- Panel Footer: Buttons -->
+      <div class="panel-footer">
+        <button class="btn btn-secondary" id="btn-run-analyse">🔬 Analyse</button>
+        <button class="btn btn-primary" id="btn-save-return">💾 Save Return</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       RESET CONFIRMATION MODAL
+       ============================================================ -->
+  <div class="modal-overlay" id="reset-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Confirm reset">
+    <div class="modal">
+      <h3>⚠️ Reset Dashboard</h3>
+      <p>This will clear all your data and reload the 10 seed records. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-cancel-reset">Cancel</button>
+        <button class="btn btn-danger" id="btn-confirm-reset">Reset Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TOAST NOTIFICATION CONTAINER
+       ============================================================ -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- ============================================================
+       SCRIPTS (load order matters)
+       ============================================================ -->
+  <script src="js/engine.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/simulator.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
